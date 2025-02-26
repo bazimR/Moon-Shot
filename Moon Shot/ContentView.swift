@@ -19,7 +19,10 @@ struct ContentView: View {
                 LazyVGrid(columns: column) {
                     ForEach(missions) { mission in
                         NavigationLink {
-                            Text("details page")
+                            MissionView(
+                                mission: mission,
+                                astronauts: astronauts
+                            )
                         } label: {
                             VStack {
                                 Image(mission.image)
@@ -40,7 +43,7 @@ struct ContentView: View {
                             }.clipShape(.rect(cornerRadius: 10)).overlay {
                                 RoundedRectangle(cornerRadius: 10).stroke(
                                     .lightBackground)
-                            }
+                            }.padding(5)
                         }
 
                     }
