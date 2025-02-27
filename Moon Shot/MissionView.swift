@@ -7,11 +7,43 @@
 
 import SwiftUI
 
-struct MissionView: View {
-    struct CrewMember {
-        let role: String
-        let astronaut: Astronaut
+struct CrewMember {
+    let role: String
+    let astronaut: Astronaut
+}
+struct Seperator: View {
+    var body: some View {
+        Rectangle()
+            .frame(height: 2)
+            .foregroundStyle(.lightBackground)
+            .padding(.vertical)
     }
+}
+
+struct CrewCard: View {
+    let crew: CrewMember
+    var body: some View {
+        HStack {
+            Image(crew.astronaut.id)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 80, height: 80)
+                .clipShape(.capsule).overlay {
+                    Capsule().stroke(
+                        .lightBackground, lineWidth: 2)
+                }
+            VStack(alignment: .leading) {
+                Text(crew.astronaut.name).font(
+                    .headline
+                ).foregroundColor(.white)
+                Text(crew.role)
+                    .foregroundColor(
+                        .white.opacity(0.6))
+            }
+        }.padding(.horizontal)
+    }
+}
+struct MissionView: View {
     let mission: Mission
     let crews: [CrewMember]
 
@@ -37,20 +69,15 @@ struct MissionView: View {
                     }
                     .padding(.top)
                 VStack(alignment: .leading) {
-                    Rectangle()
-                        .frame(height: 2)
-                        .foregroundStyle(.lightBackground)
-                        .padding(.vertical)
+                    Text(mission.formattedLaunchDate).font(.title3.bold())
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, 5)
                     Text("Mission Highlights")
                         .font(.title.bold())
                         .padding(.bottom, 5)
-
+                    Seperator()
                     Text(mission.description)
-                    Rectangle()
-                        .frame(height: 2)
-                        .foregroundStyle(.lightBackground)
-                        .padding(.vertical)
-
+                    Seperator()
                     Text("Crews").font(.title.bold()).padding(.bottom, 5)
                 }
                 .padding(.horizontal)
@@ -60,24 +87,7 @@ struct MissionView: View {
                             NavigationLink {
                                 AstronautView(astronaut: crew.astronaut)
                             } label: {
-                                HStack {
-                                    Image(crew.astronaut.id)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 80, height: 80)
-                                        .clipShape(.capsule).overlay {
-                                            Capsule().stroke(
-                                                .lightBackground, lineWidth: 2)
-                                        }
-                                    VStack(alignment: .leading) {
-                                        Text(crew.astronaut.name).font(
-                                            .headline
-                                        ).foregroundColor(.white)
-                                        Text(crew.role)
-                                            .foregroundColor(
-                                                .white.opacity(0.6))
-                                    }
-                                }.padding(.horizontal)
+                                CrewCard(crew: crew)
                             }
                         }
                     }
